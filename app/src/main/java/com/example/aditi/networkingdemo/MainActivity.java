@@ -1,8 +1,12 @@
  package com.example.aditi.networkingdemo;
 
+import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -12,6 +16,7 @@ import java.util.ArrayList;
 
      ArrayList<Post> postList;
      ListView listView;
+     ConstraintLayout mainLayout;
      PostArrayAdapter adapter;
 
      @Override
@@ -19,12 +24,11 @@ import java.util.ArrayList;
          super.onCreate(savedInstanceState);
          setContentView(R.layout.activity_main);
 
-         listView = (ListView) findViewById(R.id.listView);
+         //listView = (ListView) findViewById(R.id.listView);
 
          postList = new ArrayList<>();
-         postList.add(new Post(1, 1, "hello", "world"));
          adapter = new PostArrayAdapter(this, postList);
-         listView.setAdapter(adapter);
+         /*listView.setAdapter(adapter);*/
 
          fetchPosts();
 
@@ -44,6 +48,19 @@ import java.util.ArrayList;
          this.postList.clear();
          this.postList.addAll(postList);
          Log.i("onDownload", ""+this.postList.get(0).userId+" "+this.postList.get(0).title);
+         mainLayout = (ConstraintLayout) findViewById(R.id.mainLayout);
+         mainLayout.removeAllViews();
+         listView = new ListView(this);
+         listView.setAdapter(adapter);
+         mainLayout.addView(listView);
          adapter.notifyDataSetChanged();
+
+         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+             @Override
+             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                 Intent intent = new Intent(MainActivity.this, Comments.class);
+
+             }
+         });
      }
  }
